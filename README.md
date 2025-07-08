@@ -38,7 +38,7 @@
 <div align="center" style="background-color: #11111b; border-radius: 8px; padding: 15px;">
 
 ## 📝 License & Copyright
-### There is no any credits for anyone its from scratch by me and ui by me no inspiration from anyone. (the credits only goes for wallpapers, fabric, material icons etc.), those right reserved!
+> This is a rework of HyprLuna dots. It is not forked or based on any other rices. All credits belong to the `HyprLuna Team` assets and applications dependant and used in this rice. belongs to its respective creators/owners. This dot file has been recreated from scratch so close to no inspiration is taken from other dot files.
 ### also big thanks for Darsh the owner of fabric for his help and support!
 <img src="https://img.shields.io/github/license/Lunaris-Project/HyprLuna?style=for-the-badge&logo=gnu&color=FAB387&labelColor=1E1E2E" alt="License Badge"/>
 <p>Copyright © 2025 <a href="https://github.com/Lunaris-Project">Lunaris Project</a></p>
