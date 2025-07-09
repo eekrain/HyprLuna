@@ -1,9 +1,0 @@
-pub mod core;
-pub mod get_keybinds;
-pub mod hyprland;
-pub mod idle_inhibitor;
-pub mod network;
-pub mod recorder;
-pub mod restart_ags;
-pub mod scale;
-pub mod screenshot;
