@@ -33,7 +33,7 @@ const BarBatteryProgress = () => {
     circprog.css = batteryProgressCache.get(key);
     circprog.toggleClassName(
       "bar-batt-circprog-low",
-      percent <= options.battery.low,
+      percent <= options.battery.low
     );
     circprog.toggleClassName("bar-batt-circprog-full", Battery.charged);
   };
@@ -95,7 +95,7 @@ const UtilButton = ({ name, icon, onClicked }) => {
         onClicked: onClicked,
         className: "bar-util-btn icon-material txt-norm",
         label: `${icon}`,
-      }),
+      })
     );
   }
   return utilButtonCache.get(key);
@@ -104,7 +104,7 @@ const UtilButton = ({ name, icon, onClicked }) => {
 const Utilities = () => {
   let unsubscriber = () => {};
   let wallpaperFolder = "";
-  let showWallpaperButton = false;  // More descriptive variable name
+  let showWallpaperButton = false; // More descriptive variable name
 
   const changeWallpaperButton = Widget.Button({
     vpack: "center",
@@ -114,13 +114,19 @@ const Utilities = () => {
     label: "image",
   });
 
- const screenSnipButton = Widget.Button({
+  const screenSnipButton = Widget.Button({
     vpack: "center",
     tooltipText: getString("Screen snip"),
     onClicked: () => {
-      Utils.execAsync(
-        ['lunactl', 'screenshot', 'copy', 'area'],
-      ).catch(print);
+      Utils.execAsync([
+        "hyprshot",
+        "-zm",
+        "region",
+        "|",
+        "satty",
+        "--filename",
+        "-",
+      ]).catch(print);
     },
     className: "bar-util-btn icon-material txt-norm",
     label: "screenshot_region",
@@ -136,7 +142,6 @@ const Utilities = () => {
     label: "colorize",
   });
 
-
   const keyboardButton = Widget.Button({
     vpack: "center",
     tooltipText: getString("Toggle on-screen keyboard"),
@@ -147,15 +152,10 @@ const Utilities = () => {
     label: "keyboard",
   });
 
-
   const box = Box({
     hpack: "center",
     className: "spacing-h-4",
-    children: [
-      screenSnipButton,
-      colorPickerButton,
-      keyboardButton,
-    ],
+    children: [screenSnipButton, colorPickerButton, keyboardButton],
   });
 
   unsubscriber = userOptions.subscribe((options) => {
@@ -183,33 +183,45 @@ const WeatherWidget = () => {
 
   const getLocation = async () => {
     try {
-      const response = await execAsync(['curl', '-s', '-k', 'https://ipapi.co/json/']);
+      const response = await execAsync([
+        "curl",
+        "-s",
+        "-k",
+        "https://ipapi.co/json/",
+      ]);
       const data = JSON.parse(response);
-      return data.city || userOptions.weather?.city || 'Cairo';
+      return data.city || userOptions.weather?.city || "Cairo";
     } catch (err) {
-      return userOptions.weather?.city || 'Cairo';
+      return userOptions.weather?.city || "Cairo";
     }
   };
 
   const updateWeatherForCity = async (city) => {
     // Check cache first
     const now = Date.now();
-    if (cachedData && (now - lastUpdate) < CACHE_DURATION) {
+    if (cachedData && now - lastUpdate < CACHE_DURATION) {
       return cachedData;
     }
 
     try {
       const encodedCity = encodeURIComponent(city.trim());
-      const cmd = ['curl', '-s', '-k', '--connect-timeout', '5', `https://wttr.in/${encodedCity}?format=j1`];
+      const cmd = [
+        "curl",
+        "-s",
+        "-k",
+        "--connect-timeout",
+        "5",
+        `https://wttr.in/${encodedCity}?format=j1`,
+      ];
       const response = await execAsync(cmd);
 
       if (!response) {
-        throw new Error('Empty response from weather API');
+        throw new Error("Empty response from weather API");
       }
 
       const data = JSON.parse(response);
       if (!data || !data.current_condition || !data.current_condition[0]) {
-        throw new Error('Invalid weather data format');
+        throw new Error("Invalid weather data format");
       }
 
       const weatherData = {
@@ -272,21 +284,17 @@ const WeatherWidget = () => {
 
   const weatherBox = Box({
     hexpand: true,
-    hpack: 'center',
-    className: 'spacing-h-4 bar-group-pad txt-onSurfaceVariant',
+    hpack: "center",
+    className: "spacing-h-4 bar-group-pad txt-onSurfaceVariant",
     css: "min-width:5rem",
     children: [
-      MaterialIcon('device_thermostat', 'small'),
+      MaterialIcon("device_thermostat", "small"),
       Box({
-        className: 'spacing-h-2',
-        children: [
-          tempLabel,
-          feelsLikeTextLabel,
-          feelsLikeLabel
-        ]
-      })
+        className: "spacing-h-2",
+        children: [tempLabel, feelsLikeTextLabel, feelsLikeLabel],
+      }),
     ],
-    setup: self => {
+    setup: (self) => {
       // Initial update
       updateWidget();
 
@@ -295,14 +303,16 @@ const WeatherWidget = () => {
         updateWidget();
         return true;
       });
-    }
+    },
   });
 
   return weatherBox;
 };
 
 const BarBattery = () => {
-  const chargingIcon = MaterialIcon("bolt", "norm", { tooltipText: "Charging" });
+  const chargingIcon = MaterialIcon("bolt", "norm", {
+    tooltipText: "Charging",
+  });
   const chargingRevealer = Revealer({
     transitionDuration: userOptions.asyncGet().animations.durationSmall,
     revealChild: false,
@@ -331,7 +341,7 @@ const BarBattery = () => {
       self.hook(Battery, () => {
         self.toggleClassName(
           "bar-batt-low",
-          Battery.percent <= userOptions.asyncGet().battery.low,
+          Battery.percent <= userOptions.asyncGet().battery.low
         );
         self.toggleClassName("bar-batt-full", Battery.charged);
       }),
@@ -389,16 +399,14 @@ export default () =>
     child: Widget.Box({
       className: "spacing-h-5",
       children: [
-
-          Widget.Box({
-            className: "spacing-h-5",
-            children: [
-              BarGroup({ child: BarClock() }),
-              BarGroup({ child: WeatherWidget() }),
-              BarGroup({ child: BatteryModule() }),
-            ],
-          }),
-
+        Widget.Box({
+          className: "spacing-h-5",
+          children: [
+            BarGroup({ child: BarClock() }),
+            BarGroup({ child: WeatherWidget() }),
+            BarGroup({ child: BatteryModule() }),
+          ],
+        }),
       ],
     }),
   });

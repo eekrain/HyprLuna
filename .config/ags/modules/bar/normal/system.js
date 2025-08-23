@@ -99,7 +99,7 @@ const Utilities = () => {
             }),
             UtilButton({
                 name: getString('Screen snip'), icon: 'screenshot_region', onClicked: () => {
-                    Utils.execAsync(['lunactl', 'screenshot', 'copy', 'area'])
+                    Utils.execAsync(['hyprshot', '-zm', 'region', '|', 'satty', '--filename', '-'])
                         .catch(print)
                 }
             }),
